@@ -7,31 +7,28 @@
 #include "experiment.h"
 #include "groupExperiment.h"
 #include "functions.h"
-#include "operations.h"
+
+#include "BinaryOperations.h"
+#include "UnaryOperations.h"
 
 using namespace std::chrono;
 using namespace std;
 
 void test() {
-	ArithmeticalOperations<int>::addOperation([](int a, int b) { return a | b; }, '|');
-	ArithmeticalOperations<int>::addOperation([](int a, int b) { return a & b; }, '&');
 
-	ArithmeticalOperations<bool>::addOperation([](bool a, bool b) { return a | b; }, '|');
-	ArithmeticalOperations<bool>::addOperation([](bool a, bool b) { return a & b; }, '&');
-	ArithmeticalOperations<bool>::addOperation([](bool a, bool b) { return a ^ b; }, '^');
+	int64_t numIterations{ static_cast<int64_t>(1e7) }, numExperiments{ 10 };
 
-	int64_t numIterations{ static_cast<int64_t>(1e5) }, numExperiments{ 10 };
+	BinaryOperations<int, int, int> bin;
+	bin.insert(string("+"), [](int a, int b) { return a + b; });
+	bin.insert(string("-"), [](int a, int b) { return a - b; });
+	bin.insert(string("*"), [](int a, int b) { return a * b; });
 
-	GroupExperiment<bool> boolGroup(numIterations, numExperiments);
-	GroupExperiment<int> intGroup(numIterations, numExperiments);
-	GroupExperiment<char> charGroup(numIterations, numExperiments);
-	GroupExperiment<long> longGroup(numIterations, numExperiments);
-	GroupExperiment<float> floatGroup(numIterations, numExperiments);
-	GroupExperiment<double> doubleGroup(numIterations, numExperiments);
-	
-	auto minAvg = minAvgTime(charGroup, intGroup, longGroup, floatGroup, doubleGroup);
-	outputGroups(minAvg, charGroup, intGroup, longGroup, floatGroup, doubleGroup);
-	outputGroup(minAvgTime(boolGroup), boolGroup);
+	Experiment<int> exp(numIterations, numExperiments);
+	for (auto it = bin.begin(); it != bin.end(); ++it) {
+		exp.setOperation(it->second);
+		exp.evaluate();
+		cout << exp.getAvgTime() / (1e9) << '\n';
+	}
 }
 
 int main() {

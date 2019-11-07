@@ -19,54 +19,41 @@ using std::is_convertible;
 using std::string;
 using namespace std::chrono;
 
+/*
 template <typename T>
 using value_type = typename T::value_type;
-
-template <typename T>
-using first_argument_type = typename T::first_argument_type;
-
-template <typename T>
-using second_argument_type = typename T::second_argument_type;
-
-template <typename T>
-using result_type = typename T::result_type;
 
 template <typename P, typename T = P>
 using unary_function_type = std::function<P(T)>;
 
-template <typename P, typename T1 = P, typename T2 = P>
+template <typename P, typename T1, typename T2>
 using binary_function_type = std::function<P(T1, T2)>;
 
 template <typename T>
-using is_binary_function = is_convertible<T, binary_function_type<result_type<T>, first_argument_type<T>, second_argument_type<T>>>;
-
-template <typename T>
-using is_unary_function = is_convertible<T, unary_function_type<result_type<T>, first_argument_type<T>>>;
-
-template <typename T>
-using is_experiment = is_same<GroupExperiment<value_type<T>>, T>;
+using is_group_experiment = is_same<GroupExperiment<value_type<T>>, T>;
 
 template <typename P, typename T1 = P, typename T2 = P>
 using vector_function_type = std::vector<std::pair<binary_function_type<P, T1, T2>, char>>;
+
 
 int64_t fromTimeToFreq(int64_t value, int64_t numOfIterations, double timeExtent) {
 	return (int64_t)(numOfIterations / (value / timeExtent));
 }
 
 template <typename ... Tp>
-enable_if_t<conjunction_v<is_experiment<Tp>...>, void>
+enable_if_t<conjunction_v<is_group_experiment<Tp>...>, void>
 reduceGroups(int64_t val, Tp &... tp) {
 	((tp -= val), ...);
 }
 
 template <typename ... Tp>
-enable_if_t<conjunction_v<is_experiment<Tp>...>, void>
+enable_if_t<conjunction_v<is_group_experiment<Tp>...>, void>
 increaseGroups(int64_t val, Tp &... tp) {
 	((tp += val), ...);
 }
 
 template <typename ... Tp>
-enable_if_t<conjunction_v<is_experiment<Tp>...>, int64_t> 
+enable_if_t<conjunction_v<is_group_experiment<Tp>...>, int64_t>
 maxAvgTime(Tp &... tp) {
 	int64_t maxVal{ numeric_limits<int64_t>::min() }, temp{};
 	((temp = maxAvgTimeGroup(tp), maxVal = (temp > maxVal ? temp : maxVal)), ...);
@@ -83,7 +70,7 @@ int64_t maxAvgTimeGroup(const GroupExperiment<T>& group) {
 }
 
 template <typename ... Tp>
-enable_if_t<conjunction_v<is_experiment<Tp>...>, int64_t>
+enable_if_t<conjunction_v<is_group_experiment<Tp>...>, int64_t>
 minAvgTime(Tp & ... tp) {
 	int64_t minVal{ numeric_limits<int64_t>::max() }, temp{};
 	((temp = minAvgTimeGroup(tp), minVal = (temp < minVal ? temp : minVal)), ...);
@@ -100,7 +87,7 @@ int64_t minAvgTimeGroup(const GroupExperiment<T> & group) {
 }
 
 template <typename ... Tp>
-enable_if_t<conjunction_v<is_experiment<Tp>...>, void>
+enable_if_t<conjunction_v<is_group_experiment<Tp>...>, void>
 outputGroups(int64_t minValue, Tp ... tp) {
 	std::cout << '\n';
 	((outputGroup(minValue, tp)), ...);
@@ -134,30 +121,7 @@ void outputGroup(int64_t minValue, const GroupExperiment<T> & group) {
 	}
 	cout << '\n';
 }
-
-template <typename T, typename ... Tp>
-enable_if_t< is_binary_function<T>::value && 
-			conjunction_v<is_binary_function<Tp>...> && 
-			conjunction_v<is_same<value_type<T>, value_type<Tp>>...>, vector_function_type<value_type<T>> > 
-makeOperationList(T t, Tp ... tp) {
-	vector_function_type<value_type<T>> v;
-	v.push_back(std::pair{ t, '.' });
-	((v.push_back(std::pair{ tp, '.' })), ...);
-	return v;
-}
-
-template <typename T, typename ... Tp>
-enable_if_t <is_binary_function<typename T::first_type>::value && 
-				conjunction_v<is_binary_function<typename Tp::first_type>...> &&
-				conjunction_v<is_same<value_type<typename T::first_type>, value_type<typename Tp::first_type>>...>
-				, vector_function_type<value_type<typename T::first_type>>>
-makeOperationList(T t, Tp ... tp) {
-	vector_function_type<value_type<typename T::first_type>> v;
-	v.push_back(t);	
-	((v.push_back(tp)), ...);
-	return v;
-}
-
+*/
 
 
 
