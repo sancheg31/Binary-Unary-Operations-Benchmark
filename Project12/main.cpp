@@ -16,7 +16,7 @@ using namespace std;
 
 void test() {
 
-	int64_t numIterations{ static_cast<int64_t>(1e7) }, numExperiments{ 10 };
+	int64_t numIterations{ static_cast<int64_t>(1e5) }, numExperiments{ 10 };
 
 	BinaryOperations<int, int, int> bin;
 	bin.insert(string("+"), [](int a, int b) { return a + b; });
@@ -27,8 +27,9 @@ void test() {
 	for (auto it = bin.begin(); it != bin.end(); ++it) {
 		exp.setOperation(it->second);
 		exp.evaluate();
-		cout << exp.getAvgTime() / (1e9) << '\n';
+		cout << it->first << " " << exp.getAvgTime() / (1e9) << '\n';
 	}
+
 }
 
 int main() {

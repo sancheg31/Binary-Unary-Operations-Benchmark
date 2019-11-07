@@ -16,12 +16,16 @@ public:
 	enum class OperationType { None = 0, UnaryOperation = 1, BinaryOperation = 2 };
 
 	using value_type = T;
-	using unary_function_type = std::function<T(T)>;
-	using binary_function_type = std::function<T(T, T)>;
+	using unary_function_type = typename UnaryOperations<T, T>::function_type;
+	using binary_function_type = typename BinaryOperations<T, T, T>::function_type;
 
 	Experiment(unary_function_type, int64_t = 100000, int64_t = 10);
 	Experiment(binary_function_type, int64_t = 100000, int64_t = 10);
 	Experiment(int64_t = 100000, int64_t = 10);
+
+	Experiment(const Experiment<T>&) = default;
+	Experiment& operator=(const Experiment<T>&) = default;
+	~Experiment() = default;
 
 	const int64_t& operator[](int i) const { time.at(i); }
 	int64_t& operator[](int i) { time.at(i); }
@@ -49,6 +53,9 @@ public:
 		unaryOp = op;
 	}
 
+	void setNumberOfIterations(int64_t num) { numberOfIterations = num; }
+	void setNumberOfExperiments(int64_t num) { numberOfExperiments = num; }
+
 	void evaluate();
 
 	int64_t getAvgTime() const { return avgTime; }
@@ -72,8 +79,8 @@ private:
 	int64_t avgTime;
 	int64_t emptyCycleTime;
 	
-	const int64_t numberOfIterations;
-	const int64_t numberOfExperiments;
+	int64_t numberOfIterations;
+	int64_t numberOfExperiments;
 
 };
 

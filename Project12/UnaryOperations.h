@@ -30,7 +30,7 @@ public:
 	const_iterator begin() const { return oper.begin(); }
 	const_iterator cbegin() const { return oper.cbegin(); }
 
-	iterator end() { return oper.end(); }
+	iterator end() { return oper.end(); }	
 	const_iterator end() const { return oper.end(); }
 	const_iterator cend() const { return oper.cend(); }
 

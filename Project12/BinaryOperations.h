@@ -12,7 +12,7 @@ template <typename T, typename P1, typename P2>
 class BinaryOperations {
 public:
 	using value_type = T;
-	using function_type = std::function<T(P1, P2)>;
+	using function_type = std::function<T(P1, P2)>;	
 
 	using iterator = typename map<string, function_type>::iterator;
 	using const_iterator = typename map<string, function_type>::const_iterator;
