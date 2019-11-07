@@ -9,18 +9,18 @@
 #include "UnaryOperations.h"
 #include "BinaryOperations.h"
 
+enum class OperationType { None = 0, UnaryOperation = 1, BinaryOperation = 2 };
+
 template <typename T>
 class Experiment {
 public:
-
-	enum class OperationType { None = 0, UnaryOperation = 1, BinaryOperation = 2 };
 
 	using value_type = T;
 	using unary_function_type = typename UnaryOperations<T, T>::function_type;
 	using binary_function_type = typename BinaryOperations<T, T, T>::function_type;
 
-	Experiment(unary_function_type, int64_t = 100000, int64_t = 10);
-	Experiment(binary_function_type, int64_t = 100000, int64_t = 10);
+	Experiment(unary_function_type, const string&, int64_t = 100000, int64_t = 10);
+	Experiment(binary_function_type, const string&, int64_t = 100000, int64_t = 10);
 	Experiment(int64_t = 100000, int64_t = 10);
 
 	Experiment(const Experiment<T>&) = default;
@@ -43,16 +43,20 @@ public:
 		return *this;
 	}
 
-	void setOperation(binary_function_type op) {
+	void setOperation(binary_function_type op, const string& n) {
 		type = OperationType::BinaryOperation;
 		binaryOp = op;
+		notation = n;
 	}
 
-	void setOperation(unary_function_type op) {
+	void setOperation(unary_function_type op, const string& n) {
 		type = OperationType::UnaryOperation;
 		unaryOp = op;
+		notation = n;
 	}
 
+	const string& getOperation() const { return notation; }
+	
 	void setNumberOfIterations(int64_t num) { numberOfIterations = num; }
 	void setNumberOfExperiments(int64_t num) { numberOfExperiments = num; }
 
@@ -73,6 +77,7 @@ private:
 
 	unary_function_type unaryOp;
 	binary_function_type binaryOp;
+	string notation;
 
 	std::vector<int64_t> time;
 	
@@ -86,18 +91,18 @@ private:
 
 
 template <typename T>
-Experiment<T>::Experiment(int64_t iter, int64_t exp) : numberOfIterations(iter), numberOfExperiments(exp) {
+Experiment<T>::Experiment(int64_t iter, int64_t exp) : type(OperationType::None), numberOfIterations(iter), numberOfExperiments(exp) {
 	time.resize(numberOfExperiments);
 }
 template <typename T>
-Experiment<T>::Experiment(unary_function_type op, int64_t iter, int64_t exp) :
-	type(OperationType::UnaryOperation), unaryOp(op), numberOfIterations(iter), numberOfExperiments(exp) {
+Experiment<T>::Experiment(unary_function_type op, const string& n, int64_t iter, int64_t exp) :
+	type(OperationType::UnaryOperation), unaryOp(op), notation(n), numberOfIterations(iter), numberOfExperiments(exp) {
 	time.resize(numberOfExperiments);
 }
 
 template <typename T>
-Experiment<T>::Experiment(binary_function_type op, int64_t iter, int64_t exp) : 
-	type(OperationType::BinaryOperation), binaryOp(op), numberOfIterations(iter), numberOfExperiments(exp) {
+Experiment<T>::Experiment(binary_function_type op, const string& n, int64_t iter, int64_t exp) : 
+	type(OperationType::BinaryOperation), binaryOp(op), notation(n), numberOfIterations(iter), numberOfExperiments(exp) {
 	time.resize(numberOfExperiments);
 }
 

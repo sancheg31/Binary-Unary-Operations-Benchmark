@@ -4,8 +4,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "experiment.h"
-#include "groupExperiment.h"
+#include "Experiment.h"
 #include "functions.h"
 
 #include "BinaryOperations.h"
@@ -14,22 +13,21 @@
 using namespace std::chrono;
 using namespace std;
 
+
 void test() {
 
 	int64_t numIterations{ static_cast<int64_t>(1e5) }, numExperiments{ 10 };
 
 	BinaryOperations<int, int, int> bin;
+
 	bin.insert(string("+"), [](int a, int b) { return a + b; });
 	bin.insert(string("-"), [](int a, int b) { return a - b; });
 	bin.insert(string("*"), [](int a, int b) { return a * b; });
 
-	Experiment<int> exp(numIterations, numExperiments);
-	for (auto it = bin.begin(); it != bin.end(); ++it) {
-		exp.setOperation(it->second);
-		exp.evaluate();
-		cout << it->first << " " << exp.getAvgTime() / (1e9) << '\n';
-	}
-
+	GroupExperiment<int> group(bin, numIterations, numExperiments);
+	group.evaluate();
+	int64_t minAvg = minAvgTime(group);
+	outputGroup(minAvg, group);
 }
 
 int main() {

@@ -7,8 +7,8 @@
 #include <type_traits>
 #include <utility>
 
-#include "groupExperiment.h"
-#include "experiment.h"
+#include "GroupExperiment.h"
+#include "Experiment.h"
 
 using std::enable_if_t;
 using std::is_arithmetic;
@@ -19,7 +19,7 @@ using std::is_convertible;
 using std::string;
 using namespace std::chrono;
 
-/*
+
 template <typename T>
 using value_type = typename T::value_type;
 
@@ -31,9 +31,6 @@ using binary_function_type = std::function<P(T1, T2)>;
 
 template <typename T>
 using is_group_experiment = is_same<GroupExperiment<value_type<T>>, T>;
-
-template <typename P, typename T1 = P, typename T2 = P>
-using vector_function_type = std::vector<std::pair<binary_function_type<P, T1, T2>, char>>;
 
 
 int64_t fromTimeToFreq(int64_t value, int64_t numOfIterations, double timeExtent) {
@@ -102,7 +99,7 @@ void outputGroup(int64_t minValue, const GroupExperiment<T> & group) {
 	for (auto & x : group()) {
 		cout.unsetf(cout.right);
 		cout.setf(cout.left);
-		cout << setw(2) << x.getOperation().second;
+		cout << setw(2) << x.getOperation();
 		cout << setw(7) << typeid(typename GroupExperiment<T>::value_type{}).name();
 		cout << setw(10) << setprecision(5) << (double)fromTimeToFreq(x.getAvgTime(), x.getNumberOfIterations(), 1e9) << "  ";
 		auto percentage = (fromTimeToFreq(x.getAvgTime(), x.getNumberOfIterations(), 1e9) /
@@ -121,7 +118,7 @@ void outputGroup(int64_t minValue, const GroupExperiment<T> & group) {
 	}
 	cout << '\n';
 }
-*/
+
 
 
 
