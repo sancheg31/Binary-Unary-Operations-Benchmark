@@ -99,8 +99,8 @@ void outputGroup(int64_t minValue, const GroupExperiment<T> & group) {
 	for (auto & x : group()) {
 		cout.unsetf(cout.right);
 		cout.setf(cout.left);
-		cout << setw(2) << x.getOperation();
-		cout << setw(7) << typeid(typename GroupExperiment<T>::value_type{}).name();
+		cout << setw(5) << x.getOperation();
+		cout << setw(10) << typeid(typename GroupExperiment<T>::value_type{}).name();
 		cout << setw(10) << setprecision(5) << (double)fromTimeToFreq(x.getAvgTime(), x.getNumberOfIterations(), 1e9) << "  ";
 		auto percentage = (fromTimeToFreq(x.getAvgTime(), x.getNumberOfIterations(), 1e9) /
 			(double)fromTimeToFreq(minValue, x.getNumberOfIterations(), 1e9)) * 100;

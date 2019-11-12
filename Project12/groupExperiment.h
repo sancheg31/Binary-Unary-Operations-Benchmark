@@ -93,7 +93,6 @@ GroupExperiment<T>::GroupExperiment(const UnaryOperations<T, T>& un, const Binar
 
 template <typename T>
 void GroupExperiment<T>::evaluate() {
-	
 	for (auto it = unary.begin(); it != unary.end(); ++it)
 		experiments.push_back(Experiment<T>(it->second, it->first, numOfIterations, numOfExperiments));
 	for (auto it = binary.begin(); it != binary.end(); ++it)

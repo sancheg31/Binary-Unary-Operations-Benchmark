@@ -22,6 +22,7 @@ public:
 
 	int size() const { return oper.size(); }
 	bool contains(const string& s) const { return oper.contains(s); }
+	const_iterator find(const string& s) const { return oper.find(); }
 
 	const function_type& operator[](const string& s) const { return oper[s]; }
 	function_type& operator[](const string& s) { return oper[s]; }
