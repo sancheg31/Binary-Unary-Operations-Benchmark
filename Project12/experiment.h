@@ -130,9 +130,33 @@ int64_t Experiment<T>::evaluateTime(int64_t numOfIterations, int64_t numOfExperi
 	value_type a(9187364), b(12387), c(409871324);
 	value_type d, e, f;
 	if (type == OperationType::BinaryOperation) {
+
+
 		auto startPoint = std::chrono::high_resolution_clock::now();
-		for (int i = 0; i < numberOfIterations; ++i) {
-			d = binaryOp(a, b); e = binaryOp(b, c); f = binaryOp(a, b);
+		if (notation == string("+")) {
+			for (int i = 0; i < numberOfIterations; ++i) {
+				d = a + b; e = b + c; f = a + c;
+			}
+		}
+		else if (notation == string("-")) {
+			for (int i = 0; i < numberOfIterations; ++i) {
+				d = a - b; e = b - c; f = a - c;
+			}
+		}
+		else if (notation == string("*")) {
+			for (int i = 0; i < numberOfIterations; ++i) {
+				d = a * b; e = b * c; f = a * c;
+			}
+		}
+		else if (notation == string("/")) {
+			for (int i = 0; i < numberOfIterations; ++i) {
+				d = a / b; e = b / c; f = a / c;
+			}
+		}
+		else {
+			for (int i = 0; i < numberOfIterations; ++i) {
+				d = binaryOp(a, b); e = binaryOp(b, c); f = binaryOp(a, c);
+			}
 		}
 		auto endPoint = std::chrono::high_resolution_clock::now();
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(endPoint - startPoint).count();

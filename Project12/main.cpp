@@ -13,45 +13,34 @@
 using namespace std::chrono;
 using namespace std;
 
-int f(int a) {
-	return a;
+template <typename T, typename P1, typename P2>
+BinaryOperations<T, P1, P2> createBinaryOperations() {
+	BinaryOperations<T, P1, P2> bin;
+	bin.insert(string("+"), [](auto a, auto b) { return a + b; });
+	bin.insert(string("-"), [](auto a, auto b) { return a - b; });
+	bin.insert(string("*"), [](auto a, auto b) { return a * b; });
+	bin.insert(string("/"), [](auto a, auto b) { return a / b; });
+	return bin;
+}
+
+template <typename T, typename P>
+UnaryOperations<T, P> createUnaryOperations() {
+	UnaryOperations<T, P> un;
+
+	return un;
 }
 
 void test() {
 
 	int64_t numIterations{ static_cast<int64_t>(1e6) }, numExperiments{ 5 };
 
-	BinaryOperations<int, int, int> bin;
-	UnaryOperations<int, int> un;
-	UnaryOperations<double, double> un2;
-
-	un.insert(string("+*"), [](int arg) { return arg * 2 + 3; });
-	un.insert(string("f"), f);
-	un2.insert(string("cos"), [](double arg) { return cos(arg); });
-	un2.insert(string("sin"), [](double arg) { return sin(arg); });
-	un2.insert(string("log"), [](double arg) { return log(arg); });
-	un2.insert(string("exp"), [](double arg) { return exp(arg); });
-
-	bin.insert(string("+"), [](int a, int b) { return a + b; });
-	bin.insert(string("-"), [](int a, int b) { return a - b; });
-	bin.insert(string("*"), [](int a, int b) { return a * b; });
-	bin.insert(string("/"), [](int a, int b) { return a / b; });
-
-	BinaryOperations<double, double, double> bin2;
-	bin2.insert(string("+"), [](double a, double b) { return a + b; });
-	bin2.insert(string("-"), [](double a, double b) { return a - b; });
-	bin2.insert(string("*"), [](double a, double b) { return a * b; });
-	bin2.insert(string("/"), [](double a, double b) { return a / b; });
-
-	f(2);
-	GroupExperiment<int> group3(un, numIterations, numExperiments);
-	GroupExperiment<int> group(bin, numIterations, numExperiments);
-	GroupExperiment<double> group2(un2, bin2, numIterations, numExperiments);
-	group.evaluate();
-	group2.evaluate();
-	group3.evaluate();
-	outputGroups(minAvgTime(group, group2), group, group2);
-	outputGroups(minAvgTime(group3), group3);
+	GroupExperiment<char> groupChar(createBinaryOperations<char, char, char>(), numIterations, numExperiments);
+	GroupExperiment<int> groupInt(createBinaryOperations<int, int, int>(), numIterations, numExperiments);
+	GroupExperiment<long> groupLong(createBinaryOperations<long, long, long>(), numIterations, numExperiments);
+	GroupExperiment<float> groupFloat(createBinaryOperations<float, float, float>(), numIterations, numExperiments);
+	GroupExperiment<double> groupDouble(createBinaryOperations<double, double, double>(), numIterations, numExperiments);
+	groupChar.evaluate(); groupInt.evaluate(); groupLong.evaluate(); groupFloat.evaluate(); groupDouble.evaluate();
+	outputGroups(minAvgTime(groupChar, groupInt, groupLong, groupFloat, groupDouble), groupChar, groupInt, groupLong, groupFloat, groupDouble);
 
 }
 
